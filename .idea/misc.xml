@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Development/Android/Myntra/MusicApp/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Development/Android/MusicApp/app/src/main/res/layout/activity_genre_detail.xml" value="0.176" />
+        <entry key="..\:/Development/Android/MusicApp/app/src/main/res/layout/fragment_albums.xml" value="0.16576086956521738" />
+        <entry key="..\:/Development/Android/MusicApp/app/src/main/res/layout/fragment_artists.xml" value="0.20052083333333334" />
+        <entry key="..\:/Development/Android/MusicApp/app/src/main/res/layout/fragment_tracks.xml" value="0.18333333333333332" />
       </map>
     </option>
   </component>
