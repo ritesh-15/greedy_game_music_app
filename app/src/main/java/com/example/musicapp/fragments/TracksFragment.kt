@@ -1,60 +1,94 @@
 package com.example.musicapp.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.example.musicapp.R
+import com.example.musicapp.adapters.ArtistsAdapter
+import com.example.musicapp.adapters.TracksAdapter
+import com.example.musicapp.databinding.FragmentArtistsBinding
+import com.example.musicapp.databinding.FragmentTracksBinding
+import com.example.musicapp.models.tracks.Tracks
+import com.example.musicapp.network.factory.ArtistsViewModelFactory
+import com.example.musicapp.network.factory.TracksViewModelFactory
+import com.example.musicapp.network.models.ArtistViewModel
+import com.example.musicapp.network.models.TracksViewModel
+import com.example.musicapp.repository.ArtistsRepository
+import com.example.musicapp.repository.TracksRepository
+import com.example.musicapp.utils.Resource
+import retrofit2.Response
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [TracksFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class TracksFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var binding: FragmentTracksBinding
+    private lateinit var tracksViewModel: TracksViewModel
+    private lateinit var adapter: TracksAdapter
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tracks, container, false)
+    ): View {
+        binding = FragmentTracksBinding.inflate(layoutInflater, container, false)
+        val genreName = arguments?.getString("genre_name")
+
+        tracksViewModel = ViewModelProvider(
+            this,
+            TracksViewModelFactory(
+                TracksRepository()
+            )
+        )[TracksViewModel::class.java]
+
+        // get the tracks
+        getTracksByName(genreName!!)
+
+
+        tracksViewModel.tracks.observe(requireActivity()) { response ->
+            handleTracksResponse(response)
+        }
+
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment TracksFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TracksFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun handleTracksResponse(response: Resource<Tracks>) {
+        when (response) {
+            is Resource.Loading -> {
+                // TODO handle loading
+                Log.d("api_loading_artists", "Loading 🚀")
+            }
+            is Resource.Error -> {
+                // TODO handle error
+                Log.d("api_error", response.message.toString())
+            }
+            is Resource.Success -> {
+                if (response.data != null) {
+                    adapter = TracksAdapter(requireActivity(), response.data.tracks.track)
+
+                    binding.rvTracks.layoutManager = GridLayoutManager(requireContext(), 2)
+                    binding.rvTracks.adapter = adapter
+
+                    adapter.setOnClickListener(object : TracksAdapter.OnClickListener {
+                        override fun onClick(position: Int) {
+                            TODO("Not yet implemented")
+                        }
+                    })
                 }
             }
+            else -> {
+
+            }
+        }
     }
+
+    private fun getTracksByName(genreName: String) {
+        tracksViewModel.getTracks(genreName)
+    }
+
+
 }

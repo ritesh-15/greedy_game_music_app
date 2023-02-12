@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fitsSystemWindows="true"
     tools:context=".activities.GenreDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -11,76 +13,84 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:fitsSystemWindows="true">
+
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+            android:fitsSystemWindows="true"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            app:expandedTitleGravity="center_horizontal|top"
+            app:expandedTitleTextAppearance="@font/poppins_extrabold"
+            app:expandedTitleTextColor="@color/black"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+            app:expandedTitleMarginTop="?attr/actionBarSize"
+            app:title="Rock">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginTop="?attr/actionBarSize"
+                android:paddingTop="48dp"
+                android:background="@color/white"
+                app:layout_collapseMode="parallax"
+                android:layout_gravity="bottom"
+                android:gravity="bottom"
+                >
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="Rock"
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="32sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_description"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_light"
                     android:text="It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English."
-                    android:textAlignment="textStart"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="14sp"
+                    app:layout_collapseMode="parallax"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:background="@color/white"
+                android:gravity="top"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/back_arrow" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
+
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_genres"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Albums" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Artist" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Tracks" />
-        </com.google.android.material.tabs.TabLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:layout_collapseMode="pin" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/vp_tabs"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        app:layout_constraintTop_toBottomOf="@id/app_bar" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
