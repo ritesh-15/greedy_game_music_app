@@ -1,10 +1,12 @@
 package com.example.musicapp.activities
 
 import android.content.Intent
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import androidx.core.widget.NestedScrollView
 import androidx.lifecycle.ViewModelProvider
 import com.example.musicapp.adapters.GenresAdapter
 import com.example.musicapp.constants.Constants
@@ -17,6 +19,7 @@ import com.example.musicapp.utils.Resource
 import com.google.android.flexbox.FlexDirection
 import com.google.android.flexbox.FlexWrap
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.google.android.material.progressindicator.CircularProgressIndicator
 
 class MainActivity : AppCompatActivity() {
     private lateinit var genresViewModel: GenresViewModel
@@ -75,13 +78,20 @@ class MainActivity : AppCompatActivity() {
         when (response) {
             is Resource.Loading -> {
                 // TODO implement loading
+                binding.loader.visibility = CircularProgressIndicator.VISIBLE
+                binding.nsvContainer.visibility = NestedScrollView.GONE
                 Log.d("api_loading", "Loading 🚀")
             }
             is Resource.Error -> {
                 Log.d("api_error", response.message.toString())
+                binding.loader.visibility = CircularProgressIndicator.GONE
+                binding.nsvContainer.visibility = NestedScrollView.VISIBLE
             }
             is Resource.Success -> {
                 if (response.data != null) {
+                    binding.loader.visibility = CircularProgressIndicator.GONE
+                    binding.nsvContainer.visibility = NestedScrollView.VISIBLE
+
                      val tags = response.data.toptags.tag
 
                     // set the layout

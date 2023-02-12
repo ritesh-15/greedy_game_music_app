@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musicapp.models.albums.Albums
+import com.example.musicapp.models.artist_info.ArtistInfo
 import com.example.musicapp.models.artists.Artists
 import com.example.musicapp.models.genres.Genres
 import com.example.musicapp.repository.AlbumsRepository
@@ -38,6 +39,29 @@ class ArtistViewModel(
             } catch (e: Exception) {
                 Log.d("ERROR_RESPONSE", e.message!!)
                 _artistsResponse.value = Resource.Error(response.code().toString(), response.code())
+            }
+        }
+    }
+
+    // list of artists
+    private val _artistInfoResponse = MutableLiveData<Resource<ArtistInfo>>()
+    val artistInfo: LiveData<Resource<ArtistInfo>>
+        get() = _artistInfoResponse
+
+    fun getArtistInfo(artist:String) {
+        viewModelScope.launch {
+            _artistInfoResponse.value = Resource.Loading(null)
+            val response = repository.getArtistInfo(artist)
+            try {
+                if (response.isSuccessful) {
+                    _artistInfoResponse.value = Resource.Success(response.body())
+                } else {
+                    _artistInfoResponse.value =
+                        Resource.Error(response.code().toString(), response.code())
+                }
+            } catch (e: Exception) {
+                Log.d("ERROR_RESPONSE", e.message!!)
+                _artistInfoResponse.value = Resource.Error(response.code().toString(), response.code())
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.musicapp.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,7 +10,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.musicapp.R
+import com.example.musicapp.activities.AlbumInfoActivity
 import com.example.musicapp.adapters.AlbumsAdapter
+import com.example.musicapp.constants.Constants
 import com.example.musicapp.databinding.FragmentAlbumsBinding
 import com.example.musicapp.models.albums.Albums
 import com.example.musicapp.network.factory.AlbumsViewModelFactory
@@ -66,14 +69,19 @@ class AlbumsFragment : Fragment() {
             }
             is Resource.Success -> {
                 if (response.data != null) {
-                    adapter = AlbumsAdapter(requireActivity(), response.data.albums.album)
+                    val albums = response.data.albums.album
+                    adapter = AlbumsAdapter(requireActivity(), albums)
 
                     binding.rvAlbums.layoutManager = GridLayoutManager(requireContext(), 2)
                     binding.rvAlbums.adapter = adapter
 
                     adapter.setOnClickListener(object : AlbumsAdapter.OnClickListener {
                         override fun onClick(position: Int) {
-                            TODO("Not yet implemented")
+                            // pass the album and artist name to tha AlbumInfo activity
+                            val intent = Intent(requireActivity(), AlbumInfoActivity::class.java)
+                            intent.putExtra(Constants.ALBUM_NAME, albums[position].name)
+                            intent.putExtra(Constants.ARTIST_NAME, albums[position].artist.name)
+                            startActivity(intent)
                         }
                     })
                 }

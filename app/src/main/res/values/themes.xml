@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.MusicApp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#009FFD</item>
-        <item name="colorPrimaryVariant">#009FFD</item>
+        <item name="colorPrimary">#758BFD</item>
+        <item name="colorPrimaryVariant">#758BFD</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">#E8F1F2</item>

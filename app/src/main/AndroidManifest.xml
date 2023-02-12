@@ -16,6 +16,12 @@
         android:theme="@style/Theme.MusicApp"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ArtistInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.AlbumInfoActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.GenreDetailActivity"
             android:exported="false" />
         <activity

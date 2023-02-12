@@ -8,27 +8,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.musicapp.databinding.AlbumItemBinding
-import com.example.musicapp.databinding.GenreItemBinding
-import com.example.musicapp.databinding.TrackItemBinding
-import com.example.musicapp.models.albums.Album
-import com.example.musicapp.models.albums.Albums
-import com.example.musicapp.models.genres.Tag
-import com.example.musicapp.models.tracks.Track
+import com.example.musicapp.databinding.TopTrackItemBinding
+import com.example.musicapp.models.top_albums.Album
+import com.example.musicapp.models.top_tracks.Track
 
-class TracksAdapter(
+class TopAlbumsAdapter(
     private val context: Context,
-    private val list: List<Track>,
+    private val list: List<Album>,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private var mListener: OnClickListener? = null
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MyViewHolder(
-            TrackItemBinding.inflate(
+            TopTrackItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent,
                 false
-            ), mListener!!
+            )
         )
     }
 
@@ -59,20 +54,11 @@ class TracksAdapter(
         return list.size
     }
 
-    interface OnClickListener {
-        fun onClick(position: Int)
-    }
 
-    fun setOnClickListener(listener: OnClickListener) {
-        this.mListener = listener
-    }
-
-    class MyViewHolder(val binding: TrackItemBinding, listener: OnClickListener) :
+    class MyViewHolder(val binding: TopTrackItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.root.setOnClickListener {
-                listener.onClick(adapterPosition)
-            }
+            binding.root
         }
     }
 }
