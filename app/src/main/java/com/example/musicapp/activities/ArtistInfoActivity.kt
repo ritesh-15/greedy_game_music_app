@@ -86,9 +86,13 @@ class ArtistInfoActivity : AppCompatActivity() {
         albumsViewModel.topAlbums.observe(this) { response ->
             handleTopAlbums(response)
         }
+
+        binding.toolbar.setNavigationOnClickListener {
+            finish()
+        }
     }
 
-    private fun handleTopAlbums(response:  Resource<TopAlbums>) {
+    private fun handleTopAlbums(response: Resource<TopAlbums>) {
         when (response) {
             is Resource.Loading -> {
                 // TODO handle loading
@@ -104,6 +108,19 @@ class ArtistInfoActivity : AppCompatActivity() {
                     binding.rvTopAlbums.adapter = adapter
                     binding.rvTopAlbums.layoutManager =
                         StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.HORIZONTAL)
+
+                    adapter.setOnClickListener(object : TopAlbumsAdapter.OnClickListener {
+                        override fun onClick(position: Int) {
+                            // go to the album details activity
+                            val list = response.data.topalbums.album
+                            val intent =
+                                Intent(this@ArtistInfoActivity, AlbumInfoActivity::class.java)
+                            intent.putExtra(Constants.ALBUM_NAME, list[position].name)
+                            intent.putExtra(Constants.ARTIST_NAME, list[position].artist.name)
+                            startActivity(intent)
+                        }
+
+                    })
                 }
             }
             else -> {

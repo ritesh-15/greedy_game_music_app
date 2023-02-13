@@ -16,16 +16,25 @@ class TopAlbumsAdapter(
     private val context: Context,
     private val list: List<Album>,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+    private var mListener: TopAlbumsAdapter.OnClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return MyViewHolder(
             TopTrackItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent,
                 false
-            )
+            ), mListener!!
         )
     }
+
+    interface OnClickListener {
+        fun onClick(position: Int)
+    }
+
+    fun setOnClickListener(listener: OnClickListener) {
+        this.mListener = listener
+    }
+
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model = list[position]
@@ -33,11 +42,18 @@ class TopAlbumsAdapter(
             holder.binding.tvTrackTitle.text = model.name
             holder.binding.tvArtistName.text = model.artist.name
 
-            val imageURL = "https://picsum.photos/seed/${model.mbid}/200/300?blur=5"
+            var imageURL: String? = null
+
+            model.image.forEach {
+                if (it.size == "large") {
+                    imageURL = it.text
+                }
+            }
 
             Glide
                 .with(context)
                 .load(imageURL)
+                .centerCrop()
                 .into(object : SimpleTarget<Drawable>() {
                     override fun onResourceReady(
                         resource: Drawable,
@@ -55,10 +71,15 @@ class TopAlbumsAdapter(
     }
 
 
-    class MyViewHolder(val binding: TopTrackItemBinding) :
+    class MyViewHolder(
+        val binding: TopTrackItemBinding,
+        listener: TopAlbumsAdapter.OnClickListener,
+    ) :
         RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.root
+            binding.root.setOnClickListener {
+                listener.onClick(adapterPosition)
+            }
         }
     }
 }
